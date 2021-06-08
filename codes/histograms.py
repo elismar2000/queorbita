@@ -1,7 +1,7 @@
 from astropy import table
 import matplotlib.pyplot as plt
 
-t = table.Table.read('../queorbita_new2.out', data_start=50, header_start=49, format='ascii')
+t = table.Table.read('../queorbita_new.out', data_start=50, header_start=49, format='ascii')
 
 pos = t['PERIC'] == 'POS'
 
