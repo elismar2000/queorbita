@@ -1,12 +1,12 @@
 # Programa para fazer animacão com as órbitas do queorbita
 # Lê arquivo de saída do "queorbita"
 # Pra carda órbita, roda o "pot_hbd_din_fric-2" pra frente e pra trás no tempo
-#    por 1 milhão de anos. Os arquivos de saída ficam no diretório 
+#    por 1 milhão de anos. Os arquivos de saída ficam no diretório
 # Plota cada órbita
 #
 #
 # FALTA Botar argumentos de entrada:
-#    - Quais órbitas plotar. Variável "plotar". 
+#    - Quais órbitas plotar. Variável "plotar".
 #        f=com dyn fric
 #        nf=sem dyn fric
 #        kepl=kepleriana
@@ -18,7 +18,8 @@
 #          orb_N=a.index
 #
 #
-import numpy as np                  
+import numpy as np
+from astropy import table
 import pandas as pd                 # Para manipular arquivos: read_csv
 import plotly.graph_objects as go   # Para plot em 3d
 import plotly.express as px
@@ -27,9 +28,8 @@ import os                           # Para rodar programas externos
 
 
 # Com Pandas, cria o DataFrame queorb
-#queorb = pd.read_csv('queorbita_new.out' ,  header=50, sep=",")
-#queorb = pd.read_csv('merda' ,  header=50, sep=",")
-queorb = pd.read_csv('queorbita_anima.out' ,  header=50, sep=",")
+queorb = table.Table.read('selected_orbits.txt', format='ascii')
+queorb = queorb.to_pandas()
 # Comandos pra ter informações sobre o DataFrame queorb:
 #queorb.dtypes
 #queorb.head()
@@ -37,7 +37,7 @@ queorb = pd.read_csv('queorbita_anima.out' ,  header=50, sep=",")
 #print(queorb)
 
 
-# Qual orbita plotar? 
+# Qual orbita plotar?
 #   f=com dyn fric
 #   nf=sem dyn fric
 #   kepl=kepleriana
@@ -49,13 +49,13 @@ plotar=["f","nf","kepl"]   # todas
 #plotar=["f"]
 
 
-# Plotar marcadores? 
-marcador=["spin","q","Vq","Vnow","Rnow"]   # todas
+# Plotar marcadores?
+#marcador=["spin","q","Vq","Vnow","Rnow"]   # todas
 #marcador=["spin"]                      # só vetor de spin
 #marcador=["q"]                         # só vetor pericentro
 #marcador=["Vq"]                        # só velocidade no pericentro
 #marcador=["Vnow"]                      # só velocidade atual
-#marcador=["Rnow"]                      # só posição atual
+marcador=["Rnow"]                      # só posição atual
 
 
 
@@ -92,10 +92,10 @@ PERIC       = queorb['PERIC']
 dirName = "orbits_temp"
 if os.path.exists(dirName):
     print("Directory " , dirName ,  " exists.  ")
-else:    
+else:
     sys.exit("Directory" + dirName +  "does not exist. Please run calcula_orbitas_queorbita.py first.")
-    
-# Começo a povoar o gráfico com o marcador do centro do sistema de coordenadas:    
+
+# Começo a povoar o gráfico com o marcador do centro do sistema de coordenadas:
 
 ##############################################################################
 # Marcador do centro do sistema de coordenadas (comum a todas as órbitas)
@@ -116,28 +116,19 @@ fig = go.Figure(data=[go.Scatter3d(
 ##############################################################################
 
 
-
-
-
-
 # Escolho as órbitas que serão plotadas, vários exemplos abaixo:
 #orb_N = np.arange(1000,1100,1)
-#orb_N = [2608,2628,2824,2825,2801]    # No arquivo do queorbita --> numero da linha menos 53 
+#orb_N = [2608,2628,2824,2825,2801]    # No arquivo do queorbita --> numero da linha menos 53
 #orb_N = [2799, 2801, 2803, 2805, 2807, 2809, 2811, 2813, 2814, 2816, 2822, 2823, 2824, 2825] # orbitas com e=1 q=2.5
 
 # Abaixo o exemplo de como selecionar órbitas por propriedades, criando um novo dataframe "a"
-a=queorb.loc[(queorb["e"] == 0.9) & (queorb["q"] == 5.7) & (queorb["spy"] >= 0.8) & (queorb["PERIC"] == "POS") & (queorb["Dir"] == "Pro")]
-a=queorb.loc[ (queorb["spy"] >= 0.8) & (queorb["PERIC"] == "POS") & (queorb["Dir"] == "Pro")]
-orb_N=a.index
-
-#orb_N = [2555, 5987]
-orb_N = [0]
-
-# Abaixo, escolhe plotar todas as órbitas do dataframe
-#orb_N=queorb.index
+#a=queorb.loc[(queorb["e"] == 0.9) & (queorb["q"] == 5.7) & (queorb["spy"] >= 0.8) & (queorb["PERIC"] == "POS") & (queorb["Dir"] == "Pro")]
+#a=queorb.loc[ (queorb["spy"] >= 0.8) & (queorb["PERIC"] == "POS") & (queorb["Dir"] == "Pro")]
 
 
-
+#Para plotar todas as órbitas do DataFrame:
+a=queorb.index
+orb_N = [0, 1, 2]
 
 # Loop sobre todas as órbitas pra desenhar cada uma delas:
 for i in orb_N:
@@ -157,30 +148,30 @@ for i in orb_N:
 
     orb1["R_kepl"]=np.sqrt(orb1.x_kepl**2 + orb1.y_kepl**2 + orb1.z_kepl**2)
     orb1["V_kepl"]=np.sqrt(orb1.Vx_kepl**2 + orb1.Vy_kepl**2 + orb1.Vz_kepl**2)
-    
+
 # Calculo o índice do pericentro em cada tipo de órbita:
     idx_Peri_f=int(orb1[['R_f']].idxmin())
     idx_Peri_nf=int(orb1[['R_nf']].idxmin())
-    idx_Peri_kepl=int(orb1[['R_kepl']].idxmin()) 
-    
+    idx_Peri_kepl=int(orb1[['R_kepl']].idxmin())
+
 # Calculo o índice da posição atual:
     inow=orb1["time"].count() / 2
-    
-    
-    
-    
+
+
+
+
 
 ##############################################################################
 # ploto coisas comuns a todas as versões da órbita:
     a=queorb.loc[queorb.index==i]
     # Marcador do vetor de spin
     if "spin" in marcador:
-        x_p=[0.0,a.spx[i]*2*a.q[i]] 
+        x_p=[0.0,a.spx[i]*2*a.q[i]]
         y_p=[0.0,a.spy[i]*2*a.q[i]]
         z_p=[0.0,a.spz[i]*2*a.q[i]]
         fig.add_trace(go.Scatter3d(
-            x=x_p, 
-            y=y_p, 
+            x=x_p,
+            y=y_p,
             z=z_p,
             mode='lines',
     #        marker_size=1,
@@ -202,12 +193,12 @@ for i in orb_N:
 
     # Marcador da posição atual
     if "Rnow" in marcador:
-        x_p=[0.0,a.gx[i]] 
+        x_p=[0.0,a.gx[i]]
         y_p=[0.0,a.gy[i]]
         z_p=[0.0,a.gz[i]]
         fig.add_trace(go.Scatter3d(
-            x=x_p, 
-            y=y_p, 
+            x=x_p,
+            y=y_p,
             z=z_p,
             mode='lines',
     #        marker_size=2,
@@ -228,13 +219,13 @@ for i in orb_N:
 ##############################################################################
 
 
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
 ##############################################################################
 # Com dynamical friction
     if "f" in plotar:
@@ -260,8 +251,8 @@ for i in orb_N:
 # Marcador do início da órbita COM dynamical friction
         x_c, y_c, z_c = orb1.x_f[0], orb1.y_f[0], orb1.z_f[0]
         fig.add_trace(go.Scatter3d(
-            x=[x_c], 
-            y=[y_c], 
+            x=[x_c],
+            y=[y_c],
             z=[z_c],
             mode='markers',
             marker_size=2,
@@ -276,16 +267,16 @@ for i in orb_N:
             ),
         )
                      )
-        
+
 # Marcador do pericentro
         if "q" in marcador:
         #    print(a.qx[i],a.qy[i],a.qz[i],a.q[i])
-            x_p=[0.0, orb1.x_f[idx_Peri_f]] 
+            x_p=[0.0, orb1.x_f[idx_Peri_f]]
             y_p=[0.0, orb1.y_f[idx_Peri_f]]
             z_p=[0.0, orb1.z_f[idx_Peri_f]]
             fig.add_trace(go.Scatter3d(
-                x=x_p, 
-                y=y_p, 
+                x=x_p,
+                y=y_p,
                 z=z_p,
                 mode='lines',
         #        marker_size=1,
@@ -306,12 +297,12 @@ for i in orb_N:
 
 # Marcador do vetor velocidade atual
         if "Vnow" in marcador:
-            x_p=[orb1.x_f[inow], 0.02*orb1.Vx_f[inow] + orb1.x_f[inow]] 
+            x_p=[orb1.x_f[inow], 0.02*orb1.Vx_f[inow] + orb1.x_f[inow]]
             y_p=[orb1.y_f[inow], 0.02*orb1.Vy_f[inow] + orb1.y_f[inow]]
             z_p=[orb1.z_f[inow], 0.02*orb1.Vz_f[inow] + orb1.z_f[inow]]
             fig.add_trace(go.Scatter3d(
-                x=x_p, 
-                y=y_p, 
+                x=x_p,
+                y=y_p,
                 z=z_p,
                 mode='lines',
         #        marker_size=2,
@@ -329,15 +320,15 @@ for i in orb_N:
                 )
             )
                          )
-        
+
 # Vetor velocidade no pericentro
         if "Vq" in marcador:
             x_p=[orb1.x_f[idx_Peri_f], 0.02*orb1.Vx_f[idx_Peri_f] + orb1.x_f[idx_Peri_f]]
             y_p=[orb1.y_f[idx_Peri_f], 0.02*orb1.Vy_f[idx_Peri_f] + orb1.y_f[idx_Peri_f]]
             z_p=[orb1.z_f[idx_Peri_f], 0.02*orb1.Vz_f[idx_Peri_f] + orb1.z_f[idx_Peri_f]]
             fig.add_trace(go.Scatter3d(
-                x=x_p, 
-                y=y_p, 
+                x=x_p,
+                y=y_p,
                 z=z_p,
                 mode='lines',
                 name='V_q',
@@ -352,18 +343,18 @@ for i in orb_N:
                 )
             )
                          )
-            
+
 # FIM Com dynamical friction
 ##############################################################################
 
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
 ##############################################################################
 # Sem dynamical friction
     if "nf" in plotar:
@@ -389,8 +380,8 @@ for i in orb_N:
 # Marcador do início da órbita SEM dynamical friction
         x_c, y_c, z_c = orb1.x_nf[0], orb1.y_nf[0], orb1.z_nf[0]
         fig.add_trace(go.Scatter3d(
-            x=[x_c], 
-            y=[y_c], 
+            x=[x_c],
+            y=[y_c],
             z=[z_c],
             mode='markers',
             marker_size=2,
@@ -401,17 +392,17 @@ for i in orb_N:
         )
                      )
 
-        
-        
+
+
 # Marcador do pericentro
         if "q" in marcador:
         #    print(a.qx[i],a.qy[i],a.qz[i],a.q[i])
-            x_p=[0.0, orb1.x_nf[idx_Peri_nf]] 
+            x_p=[0.0, orb1.x_nf[idx_Peri_nf]]
             y_p=[0.0, orb1.y_nf[idx_Peri_nf]]
             z_p=[0.0, orb1.z_nf[idx_Peri_nf]]
             fig.add_trace(go.Scatter3d(
-                x=x_p, 
-                y=y_p, 
+                x=x_p,
+                y=y_p,
                 z=z_p,
                 mode='lines',
         #        marker_size=1,
@@ -432,12 +423,12 @@ for i in orb_N:
 
 # Marcador do vetor velocidade atual
         if "Vnow" in marcador:
-            x_p=[orb1.x_nf[inow], 0.02*orb1.Vx_nf[inow] + orb1.x_nf[inow]] 
+            x_p=[orb1.x_nf[inow], 0.02*orb1.Vx_nf[inow] + orb1.x_nf[inow]]
             y_p=[orb1.y_nf[inow], 0.02*orb1.Vy_nf[inow] + orb1.y_nf[inow]]
             z_p=[orb1.z_nf[inow], 0.02*orb1.Vz_nf[inow] + orb1.z_nf[inow]]
             fig.add_trace(go.Scatter3d(
-                x=x_p, 
-                y=y_p, 
+                x=x_p,
+                y=y_p,
                 z=z_p,
                 mode='lines',
         #        marker_size=2,
@@ -455,15 +446,15 @@ for i in orb_N:
                 )
             )
                          )
-        
+
 # Vetor velocidade no pericentro
         if "Vq" in marcador:
             x_p=[orb1.x_nf[idx_Peri_nf], 0.02*orb1.Vx_nf[idx_Peri_nf] + orb1.x_nf[idx_Peri_nf]]
             y_p=[orb1.y_nf[idx_Peri_nf], 0.02*orb1.Vy_nf[idx_Peri_nf] + orb1.y_nf[idx_Peri_nf]]
             z_p=[orb1.z_nf[idx_Peri_nf], 0.02*orb1.Vz_nf[idx_Peri_nf] + orb1.z_nf[idx_Peri_nf]]
             fig.add_trace(go.Scatter3d(
-                x=x_p, 
-                y=y_p, 
+                x=x_p,
+                y=y_p,
                 z=z_p,
                 mode='lines',
                 name='V_q',
@@ -478,19 +469,19 @@ for i in orb_N:
                 )
             )
                          )
-            
+
 # FIM Sem dynamical friction
 ##############################################################################
-         
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
 ##############################################################################
 # Kepleriana
     if "kepl" in plotar:
@@ -517,8 +508,8 @@ for i in orb_N:
 # Marcador do início da órbita Kepleriana
         x_c, y_c, z_c = orb1.x_kepl[0], orb1.y_kepl[0], orb1.z_kepl[0]
         fig.add_trace(go.Scatter3d(
-            x=[x_c], 
-            y=[y_c], 
+            x=[x_c],
+            y=[y_c],
             z=[z_c],
             mode='markers',
             marker_size=2,
@@ -529,16 +520,16 @@ for i in orb_N:
         )
                      )
 
-        
+
 # Marcador do pericentro
         if "q" in marcador:
         #    print(a.qx[i],a.qy[i],a.qz[i],a.q[i])
-            x_p=[0.0,a.qx[i]*a.q[i]] 
+            x_p=[0.0,a.qx[i]*a.q[i]]
             y_p=[0.0,a.qy[i]*a.q[i]]
             z_p=[0.0,a.qz[i]*a.q[i]]
             fig.add_trace(go.Scatter3d(
-                x=x_p, 
-                y=y_p, 
+                x=x_p,
+                y=y_p,
                 z=z_p,
                 mode='lines',
         #        marker_size=1,
@@ -559,12 +550,12 @@ for i in orb_N:
 
 # Marcador do vetor velocidade atual
         if "Vnow" in marcador:
-            x_p=[orb1.x_kepl[inow], 0.02*orb1.Vx_kepl[inow] + orb1.x_kepl[inow]] 
+            x_p=[orb1.x_kepl[inow], 0.02*orb1.Vx_kepl[inow] + orb1.x_kepl[inow]]
             y_p=[orb1.y_kepl[inow], 0.02*orb1.Vy_kepl[inow] + orb1.y_kepl[inow]]
             z_p=[orb1.z_kepl[inow], 0.02*orb1.Vz_kepl[inow] + orb1.z_kepl[inow]]
             fig.add_trace(go.Scatter3d(
-                x=x_p, 
-                y=y_p, 
+                x=x_p,
+                y=y_p,
                 z=z_p,
                 mode='lines',
         #        marker_size=2,
@@ -589,8 +580,8 @@ for i in orb_N:
             ss = np.array([a.spx[i], a.spy[i], a.spz[i]])
             vq = np.cross(ss, qq)
             fig.add_trace(go.Scatter3d(
-                x=[a.qx[i]*a.q[i], 0.02*a.vq[i]*vq[0] + a.qx[i]*a.q[i]], 
-                y=[a.qy[i]*a.q[i], 0.02*a.vq[i]*vq[1] + a.qy[i]*a.q[i]], 
+                x=[a.qx[i]*a.q[i], 0.02*a.vq[i]*vq[0] + a.qx[i]*a.q[i]],
+                y=[a.qy[i]*a.q[i], 0.02*a.vq[i]*vq[1] + a.qy[i]*a.q[i]],
                 z=[a.qz[i]*a.q[i], 0.02*a.vq[i]*vq[2] + a.qz[i]*a.q[i]],
                 mode='lines',
         #        marker_size=1,
@@ -609,21 +600,10 @@ for i in orb_N:
             )
                          )
 
-        
 
-            
+
+
 # FIM Kepleriana
-    
-
-
-
-    
-    
-    
-
-
-    
- 
 
 
 
@@ -631,9 +611,20 @@ for i in orb_N:
 
 
 
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##################### FIM Loop sobre as órbitas
 
@@ -646,7 +637,7 @@ fig.update_layout(
         aspectmode="cube"),
     width=1500,
     margin=dict(r=0, l=50, b=20, t=0),
-    
+
 )
 
 
