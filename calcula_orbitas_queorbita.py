@@ -14,7 +14,7 @@ import os                           # Para rodar programas externos
 
 
 #queorb = pd.read_csv('queorbita_new.out' ,  header=50, sep=",")
-queorb = table.Table.read('selected_orbits.txt', format='ascii')
+queorb = table.Table.read('selected_orbits2.txt', format='ascii')
 queorb = queorb.to_pandas()
 
 #queorb.dtypes
@@ -67,14 +67,14 @@ aHalo = 14.92            # HALO scalelength (aHalo, MakeNewDisk output - RH) [kp
 dmfrac= 0.04             # DISK mass fraction (dmfrac):
 aDisk = 2.1              # DISK scalelength (aDisk, end of MakeNewDisk output) [kpc]:
 Z0    = 0.42             # DISK vertical scalelength (DiskHeight, from MakeNewDisk parameters file) [kpc]:
-bmfrac= 0.18             # BULGE mass fraction (bmfrac, from MakeNewDisk parameters file - MD):
+bmfrac= 0.01             # BULGE mass fraction (bmfrac, from MakeNewDisk parameters file - MD):
 aBfrac= 0.019            # BULGE scalelength fraction (aBulge, from MakeNewDisk parameters file - BulgeSize):
 bhfrac= 5.8e-5           # BLACK HOLE mass fraction (bhfrac, from MakeNewDisk parameters file - MBH):
 # Pot 2 Position (x,y,z) [kpc] --> sai da tabela queorbita pra cada órbita
 # Pot 2 Velocity (vx,vy,vz) [km/s]: --> sai da tabela queorbita pra cada órbita
 m_p2    = 22.0E10
 k_p2    = 5.58          # Pot 2 radial scalelength [kpc]:
-tf      = 1000.0         # Final time (tf=0 is pericenter)
+tf      = 1000.0         # Final time (tf=0 is pericenter) (Myr)
 dt      = 0.1            # Timestep
 
 # Varrendo todas as órbitas BACKWARD
