@@ -37,15 +37,17 @@ class Velocity:
 
 
     def masks(self):
+        #For 120.000 particles:
         #ids galaxy 1: 0 - 9999; 20000 - 39999; 60000 - 83999; 108000 - 113999
         #ids galaxy 2: 10000 - 19999; 40000 - 59999; 84000 - 107999; 114000 - 119999
 
-        self.mask1 = (self.ids <= 9999) | (self.ids >=20000) & (self.ids <= 39999) | (self.ids >= 60000) \
-                & (self.ids <= 83999) | (self.ids >= 108000) & (self.ids <= 113999)
+        #for 60.000 particles:
+        self.mask1 = (self.ids <= 4999) | (self.ids >= 10000) & (self.ids <= 19999) | (self.ids >= 30000) \
+                & (self.ids <= 41999) | (self.ids >= 54000) & (self.ids <= 56999)
 
 
-        self.mask2 = (self.ids >= 10000) & (self.ids <= 19999) | (self.ids >=40000) & (self.ids <= 59999) \
-                | (self.ids >= 84000) & (self.ids <= 107999) | (self.ids >= 114000) & (self.ids <= 119999)
+        self.mask2 = (self.ids >= 5000) & (self.ids <= 9999) | (self.ids >= 20000) & (self.ids <= 29999) \
+                | (self.ids >= 42000) & (self.ids <= 53999) | (self.ids >= 57000) & (self.ids <= 59999)
 
 
     def mean_vel(self):
