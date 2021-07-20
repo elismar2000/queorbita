@@ -5,7 +5,9 @@ t = table.Table.read('../queorbita_new.out', data_start=50, header_start=49, for
 
 pos = t['PERIC'] == 'POS'
 
-fig, axs = plt.subplots(2, 5, figsize=(40, 40), sharey=True)
+plt.style.use('Solarize_Light2')
+
+fig, axs = plt.subplots(2, 5, figsize=(12, 7))
 
 axs[0, 0].hist(t['e'][pos], bins=50, color='gold')
 axs[0, 0].set_title('excentricity')
@@ -17,6 +19,7 @@ axs[0, 1].hist(t['gz'][pos], bins=50, color='gold')
 axs[0, 1].set_title('gz')
 axs[0, 1].set_xlabel('kpc')
 axs[0, 1].tick_params(length=2, tickdir='in', labelsize=8)
+axs[0, 1].set_ylim((0, 1100))
 
 axs[0, 2].hist(t['q'][pos], bins=50, color='gold')
 axs[0, 2].set_title('distance of pericenter')
@@ -59,5 +62,6 @@ axs[1, 4].set_title('VZ_ceu')
 axs[1, 4].set_xlabel('km/s')
 axs[1, 4].tick_params(length=2, tickdir='in', labelsize=8)
 
-plt.subplots_adjust(wspace=0.15, hspace=0.25)
-plt.show()
+plt.subplots_adjust(wspace=0.3, hspace=0.3)
+plt.savefig('histograms.pdf', dpi=5)
+#plt.show()
