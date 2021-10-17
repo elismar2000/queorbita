@@ -11,10 +11,8 @@ import plotly.graph_objects as go   # Para plot em 3d
 import subprocess                   # Para rodar programas externos
 import os                           # Para rodar programas externos
 
-
-
 #queorb = pd.read_csv('queorbita_new.out' ,  header=50, sep=",")
-queorb = table.Table.read('selected_orbits2.txt', format='ascii')
+queorb = table.Table.read('selected_orbits_e0.9.txt', format='ascii')
 queorb = queorb.to_pandas()
 
 #queorb.dtypes

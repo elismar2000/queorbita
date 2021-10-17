@@ -25,10 +25,10 @@ import plotly.graph_objects as go   # Para plot em 3d
 import plotly.express as px
 import subprocess                   # Para rodar programas externos
 import os                           # Para rodar programas externos
-
+import sys
 
 # Com Pandas, cria o DataFrame queorb
-queorb = table.Table.read('selected_orbits.txt', format='ascii')
+queorb = table.Table.read('/home/elismar/Documentos/Fisica/IC/queorbita/orbits_3rd_attempt/selected_orbits_e1.0.txt', format='ascii')
 queorb = queorb.to_pandas()
 # Comandos pra ter informações sobre o DataFrame queorb:
 #queorb.dtypes
@@ -36,21 +36,22 @@ queorb = queorb.to_pandas()
 #queorb.tail()
 #print(queorb)
 
+dirName = "/home/elismar/Documentos/Fisica/IC/queorbita/orbits_3rd_attempt/orbits_temp_e1.0"
 
 # Qual orbita plotar?
 #   f=com dyn fric
 #   nf=sem dyn fric
 #   kepl=kepleriana
 #
-plotar=["f","nf","kepl"]   # todas
-#plotar=["nf"]
-#plotar=["kepl"]
-#plotar=["f","nf"]
-#plotar=["f"]
+# plotar=["f","nf","kepl"]   # todas
+# plotar=["nf"]
+# plotar=["kepl"]
+# plotar=["f","nf"]
+plotar=["f"]
 
 
 # Plotar marcadores?
-#marcador=["spin","q","Vq","Vnow","Rnow"]   # todas
+# marcador=["spin","q","Vq","Vnow","Rnow"]   # todas
 #marcador=["spin"]                      # só vetor de spin
 #marcador=["q"]                         # só vetor pericentro
 #marcador=["Vq"]                        # só velocidade no pericentro
@@ -89,7 +90,7 @@ PERIC       = queorb['PERIC']
 
 # Crio diretório para arquivos temporários
 
-dirName = "orbits_temp"
+
 if os.path.exists(dirName):
     print("Directory " , dirName ,  " exists.  ")
 else:
@@ -127,14 +128,13 @@ fig = go.Figure(data=[go.Scatter3d(
 
 
 #Para plotar todas as órbitas do DataFrame:
-a=queorb.index
-orb_N = [0, 1, 2]
+orb_N = queorb.index
 
 # Loop sobre todas as órbitas pra desenhar cada uma delas:
 for i in orb_N:
     fname = dirName + "/" + "orb_%05d.dat" % i
     orb = pd.read_csv(fname, sep="\t")
-    orb1 = orb[9000:11000:10]       # Pega somente 1Gyr antes e 1Gyr depois do pericentro (linha 10000).
+    orb1 = orb                      # Pega somente 1Gyr antes e 1Gyr depois do pericentro (linha 10000).
                                     # Os índices ficam os mesmos do dataframe antigo
     orb1 = orb1.reset_index(drop=True)     # Arruma os índices do orb1 em sequência a partir do 0
 
