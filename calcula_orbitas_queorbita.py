@@ -12,7 +12,7 @@ import subprocess                   # Para rodar programas externos
 import os                           # Para rodar programas externos
 
 #queorb = pd.read_csv('queorbita_new.out' ,  header=50, sep=",")
-queorb = table.Table.read('selected_orbits_e0.9.txt', format='ascii')
+queorb = table.Table.read('orbits_10th_attempt/selected_orbits_e0.8.txt', format='ascii')
 queorb = queorb.to_pandas()
 
 #queorb.dtypes
@@ -50,7 +50,7 @@ PERIC       = queorb['PERIC']
 # pos-peri    = queorb['pos-peri']
 
 # Crio diretório para arquivos temporários
-dirName = "orbits_temp"
+dirName = "orbits_10th_attempt/orbits_temp_e0.8"
 if not os.path.exists(dirName):
     os.mkdir(dirName)
     print("Directory " , dirName ,  " Created ")
@@ -59,19 +59,19 @@ else:
 
 
 # Parâmetros para o pot_din_fric
-M200  = 57.9E10          # MAIN Galaxy M200 (MakeNewDisk output) [Msun]:
-R200  = 200.0            # MAIN Galaxy R200 (MakeNewDisk output) [kpc]:
-aHalo = 14.92            # HALO scalelength (aHalo, MakeNewDisk output - RH) [kpc]:
-dmfrac= 0.04             # DISK mass fraction (dmfrac):
-aDisk = 2.1              # DISK scalelength (aDisk, end of MakeNewDisk output) [kpc]:
-Z0    = 0.42             # DISK vertical scalelength (DiskHeight, from MakeNewDisk parameters file) [kpc]:
-bmfrac= 0.01             # BULGE mass fraction (bmfrac, from MakeNewDisk parameters file - MD):
-aBfrac= 0.019            # BULGE scalelength fraction (aBulge, from MakeNewDisk parameters file - BulgeSize):
-bhfrac= 5.8e-5           # BLACK HOLE mass fraction (bhfrac, from MakeNewDisk parameters file - MBH):
+M200  = 143E10          # MAIN Galaxy M200 (MakeNewDisk output) [Msun]:
+R200  = 234.0            # MAIN Galaxy R200 (MakeNewDisk output) [kpc]:
+aHalo = 34.23             # HALO scalelength (aHalo, MakeNewDisk output - RH) [kpc]:
+dmfrac= 0.026             # DISK mass fraction (dmfrac):
+aDisk = 2.171              # DISK scalelength (aDisk, end of MakeNewDisk output) [kpc]:
+Z0    = 0.43             # DISK vertical scalelength (DiskHeight, from MakeNewDisk parameters file) [kpc]:
+bmfrac= 4.9E-5             # BULGE mass fraction (bmfrac, from MakeNewDisk parameters file - MD):
+aBfrac= 0.0017            # BULGE scalelength fraction (aBulge, from MakeNewDisk parameters file - BulgeSize):
+bhfrac= 1.95E-4           # BLACK HOLE mass fraction (bhfrac, from MakeNewDisk parameters file - MBH):
 # Pot 2 Position (x,y,z) [kpc] --> sai da tabela queorbita pra cada órbita
 # Pot 2 Velocity (vx,vy,vz) [km/s]: --> sai da tabela queorbita pra cada órbita
-m_p2    = 22.0E10
-k_p2    = 5.58          # Pot 2 radial scalelength [kpc]:
+m_p2    = 48.9E10
+k_p2    = 164.0          # Pot 2 radial scalelength [kpc] #Coloquei metade do R200 da NGC2992
 tf      = 1000.0         # Final time (tf=0 is pericenter) (Myr)
 dt      = 0.1            # Timestep
 

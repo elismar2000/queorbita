@@ -8,16 +8,14 @@ orb_type = 'f'
 
 e = 1.0
 
-orbits_dir = 'orbits_temp_e' + str(e)
-if e == 1.0: orbits=16
-if e == 0.9: orbits=52
-
+orbits_dir = '/home/elismar/Documentos/Fisica/IC/queorbita/orbits_5th_attempt/orbits_temp/'
+orbits = 20
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 for i in range(0, orbits):
-    orb_file = '../' + orbits_dir + '/orb_%05d.dat' %i
+    orb_file = orbits_dir + '/orb_%05d.dat' %i
     orb_table = Table.read(orb_file, format='ascii')
 
     # for orb_type in ['kepl', 'f', 'nf']:

@@ -64,14 +64,13 @@ class Velocity:
         #ids galaxy 2: 10000 - 19999; 40000 - 59999; 84000 - 107999; 114000 - 119999
 
         #for 60.000 particles:
-        self.mask1 = (self.ids <= 4999) | (self.ids >= 10000) & (self.ids <= 19999) | (self.ids >= 30000) \
-                & (self.ids <= 41999) | (self.ids >= 54000) & (self.ids <= 56999)
+        self.mask1 = (self.ids <= 4999) | (self.ids >= 10000) & (self.ids <= 21999) | (self.ids >= 34000) \
+                & (self.ids <= 43999) | (self.ids >= 54000) & (self.ids <= 56999)
 
 
-        self.mask2 = (self.ids >= 5000) & (self.ids <= 9999) | (self.ids >= 20000) & (self.ids <= 29999) \
-                | (self.ids >= 42000) & (self.ids <= 53999) | (self.ids >= 57000) & (self.ids <= 59999)
-
-
+        self.mask2 = (self.ids >= 5000) & (self.ids <= 9999) | (self.ids >= 22000) & (self.ids <= 33999) \
+                | (self.ids >= 44000) & (self.ids <= 53999) | (self.ids >= 57000) & (self.ids <= 59999)
+        
 
     def _distances(self, position, point):
         '''

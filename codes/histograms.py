@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 t = table.Table.read('../orbits_3rd_attempt/queorbita_new.out', data_start=50, header_start=49, format='ascii')
 
 pos = t['PERIC'] == 'POS'
-# mask = (t['PERIC'] == 'POS') & (t['spin-orb'] < 50) & (t['e'] == 0.9) & (t['VZ_ceu'] > -119 - 2) & (t['VZ_ceu'] < -119 + 2)
+# mask = (t['PERIC'] == 'POS') & (t['spin-orb'] < 60) & (t['e'] == 1.0) & (t['VZ_ceu'] > -119 - 10) & (t['VZ_ceu'] < -119 + 10)
 
 t = t[pos]
 

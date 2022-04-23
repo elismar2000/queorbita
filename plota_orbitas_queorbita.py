@@ -28,7 +28,7 @@ import os                           # Para rodar programas externos
 import sys
 
 # Com Pandas, cria o DataFrame queorb
-queorb = table.Table.read('/home/elismar/Documentos/Fisica/IC/queorbita/orbits_3rd_attempt/selected_orbits_e1.0.txt', format='ascii')
+queorb = table.Table.read('/home/elismar/Documentos/Fisica/IC/queorbita/orbits_10th_attempt/selected_orbits_e0.8.txt', format='ascii')
 queorb = queorb.to_pandas()
 # Comandos pra ter informações sobre o DataFrame queorb:
 #queorb.dtypes
@@ -36,14 +36,14 @@ queorb = queorb.to_pandas()
 #queorb.tail()
 #print(queorb)
 
-dirName = "/home/elismar/Documentos/Fisica/IC/queorbita/orbits_3rd_attempt/orbits_temp_e1.0"
+dirName = "/home/elismar/Documentos/Fisica/IC/queorbita/orbits_10th_attempt/orbits_temp_e0.8/"
 
 # Qual orbita plotar?
 #   f=com dyn fric
 #   nf=sem dyn fric
 #   kepl=kepleriana
 #
-# plotar=["f","nf","kepl"]   # todas
+#plotar=["f","nf","kepl"]   # todas
 # plotar=["nf"]
 # plotar=["kepl"]
 # plotar=["f","nf"]
