@@ -64,13 +64,13 @@ class Velocity:
         #ids galaxy 2: 10000 - 19999; 40000 - 59999; 84000 - 107999; 114000 - 119999
 
         #for 60.000 particles:
-        self.mask1 = (self.ids <= 4999) | (self.ids >= 10000) & (self.ids <= 21999) | (self.ids >= 34000) \
-                & (self.ids <= 43999) | (self.ids >= 54000) & (self.ids <= 56999)
+        self.mask1 = (self.ids <= 74999) | (self.ids >= 150000) & (self.ids <= 249999) | (self.ids >= 350000) \
+                & (self.ids <= 361999) | (self.ids >= 375000) & (self.ids <= 376249)
 
 
-        self.mask2 = (self.ids >= 5000) & (self.ids <= 9999) | (self.ids >= 22000) & (self.ids <= 33999) \
-                | (self.ids >= 44000) & (self.ids <= 53999) | (self.ids >= 57000) & (self.ids <= 59999)
-        
+        self.mask2 = (self.ids >= 75000) & (self.ids <= 149999) | (self.ids >= 250000) & (self.ids <= 349999) \
+                | (self.ids >= 362000) & (self.ids <= 374999) | (self.ids >= 376250) & (self.ids <= 377499)
+
 
     def _distances(self, position, point):
         '''
@@ -127,8 +127,8 @@ if __name__ == '__main__':
     snapshot = sys.argv[1]
 
     v = Velocity(snapshot)
-    v.relative_positions()
+    # v.relative_positions()
     v.relative_velocities()
 
-    print('Delta_r = {}'.format(v.relative_pos))
+    # print('Delta_r = {}'.format(v.relative_pos))
     print('Delta_v = {}'.format(v.relative_vel))
